@@ -1,0 +1,18 @@
+# machines/printing3d.toml
+# Imprimante 3D — Klipper / Moonraker (Raspberry Pi)
+
+name = "printing3d"
+host = "ender3"
+user = ""
+
+# Fichiers à copier
+files = [
+    # Répertoire de config Klipper
+    # (chemin standard Moonraker moderne — à ajuster si nécessaire)
+    "/home/adpi3d/printer_data/config",
+
+    # Fichiers de compilation Klipper
+    "/home/adpi3d/klipper/compile.sh",
+    "/home/adpi3d/klipper/main.cfg",
+    "/home/adpi3d/klipper/pi.cfg",
+]

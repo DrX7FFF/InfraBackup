@@ -1,0 +1,7 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Dry-run logs
+dry-run-*.sh
+# output/

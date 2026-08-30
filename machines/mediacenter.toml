@@ -1,0 +1,33 @@
+# machines/mediacenter.toml
+# MediaCenter CoreELEC / Kodi
+
+name = "mediacenter"
+host = "mediacenter"  # alias défini dans ~/.ssh/config
+user = ""             # omis — ssh lit le User depuis ~/.ssh/config
+
+# Fichiers à copier — on ne copie pas addons/ (binaires)
+# La liste des addons est dans le rapport "kodi-addons"
+files = [
+    # Config système
+    "/storage/.config",
+    # Kodi userdata
+    "/storage/.kodi/userdata/*",
+    # "/storage/.kodi/userdata/favourites.xml",
+    # "/storage/.kodi/userdata/FondEcranSysteme.jpg",
+    # "/storage/.kodi/userdata/guisettings.xml",
+    # "/storage/.kodi/userdata/sources.xml",
+    "/storage/.kodi/userdata/peripheral_data",
+    "/storage/.kodi/userdata/playlists",
+    "/storage/.kodi/userdata/addon_data/*/settings.xml",
+    "/storage/.kodi/tools"
+]
+
+# Rapports à générer (noms définis dans tools/reports.py)
+reports = [
+    "kodi-addons",
+    "services",
+    # "disques",
+    "docker",
+]
+
+# git_repos non défini → module git_watch ignoré

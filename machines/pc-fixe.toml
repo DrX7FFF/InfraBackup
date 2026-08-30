@@ -1,0 +1,43 @@
+# machines/pc-fixe.toml
+# PC Fixe Ubuntu — orchestrateur et tour de contrôle
+# Exécution locale (pas de SSH)
+
+name    = "pc-fixe"
+host    = "localhost"
+user    = ""   # ignoré pour localhost ; rempli dynamiquement par backup.py
+
+# Fichiers à copier
+files = [
+    "~/.gitconfig",
+    "~/.ssh/config",
+    "~/.config/systemd/user",
+    # "~/.config/OrcaSlicer/user",
+    "~/.local/share/nautilus/scripts",
+    # Configuration utilisateur des Flatpak
+    # "~/.var/app",
+    "~/.var/app/com.orcaslicer.OrcaSlicer/config/OrcaSlicer/user",
+    # overrides des Flatpak
+    "~/.local/share/flatpak/overrides"
+]
+
+# Rapports à générer (noms définis dans tools/reports.py)
+reports = [
+    "apt-manual",
+    # "apt-versions",
+    "flatpak",
+    # "snap",
+    "services",
+    "docker",
+    # "disques",
+    # "partitions",
+    # "materiel",
+    # "reseau",
+    # "crontab",
+    "gnome",
+]
+
+# Repos Git à surveiller
+git_repos = [
+    "~/GIT/LinuxInstall",
+    # "~/MyGIT/Dev",   # Décommenter si nécessaire
+]
