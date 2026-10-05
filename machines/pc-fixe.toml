@@ -6,8 +6,9 @@ name    = "pc-fixe"
 host    = "localhost"
 user    = ""   # ignoré pour localhost ; rempli dynamiquement par backup.py
 
-# Fichiers à copier
-files = [
+# 'include' : racines à sauvegarder (voir commentaire dans mediacenter.toml
+# pour le détail du fonctionnement include/exclude).
+include = [
     "~/.gitconfig",
     "~/.ssh/config",
     "~/.config/systemd/user",
@@ -19,6 +20,8 @@ files = [
     # overrides des Flatpak
     "~/.local/share/flatpak/overrides"
 ]
+
+# exclude non défini → aucune exclusion pour cette machine
 
 # Rapports à générer (noms définis dans tools/reports.py)
 reports = [

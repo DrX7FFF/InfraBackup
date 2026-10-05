@@ -69,13 +69,15 @@ def process_machine(conf_file: Path) -> bool:
         return False
 
     # Module fichiers
-    files = cfg.get("files", [])
-    if files:
+    include = cfg.get("include", [])
+    exclude = cfg.get("exclude", [])
+    if include:
         # Expansion du ~ pour localhost
         if host == "localhost":
-            files = [str(Path(p).expanduser()) for p in files]
+            include = [str(Path(p).expanduser()) for p in include]
+            exclude = [str(Path(p).expanduser()) for p in exclude]
         print("[files]")
-        run_files(host, user, machine_output, files)
+        run_files(host, user, machine_output, include, exclude=exclude)
 
     # Module rapports
     reports = cfg.get("reports", [])
@@ -177,7 +179,7 @@ def main() -> None:
     for conf_file in conf_files:
         _ = process_machine(conf_file)
 
-    commit_output()
+    # commit_output()
 
 
 if __name__ == "__main__":

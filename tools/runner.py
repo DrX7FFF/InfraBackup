@@ -86,7 +86,11 @@ def run_cmd(host: str, user: str, cmd: str, **kwargs) -> subprocess.CompletedPro
 
 
 def run_rsync(
-    host: str, user: str, paths: list[str], dest: str
+    host: str,
+    user: str,
+    paths: list[str],
+    dest: str,
+    excludes: list[str] | None = None,
 ) -> subprocess.CompletedProcess:
     """Lance rsync localement ou vers un hôte distant selon host.
 
@@ -94,15 +98,28 @@ def run_rsync(
     - Chemin avec glob (*) → rsync --no-recursive : premier niveau uniquement,
       les sous-dossiers éventuellement matchés ne sont pas parcourus.
     - Chemin sans glob     → rsync récursif complet (comportement par défaut).
+
+    excludes : motifs passés à --exclude (un flag par entrée), appliqués aux
+    deux groupes d'appels (plain et glob). Avec -R, la racine du transfert
+    rsync est '/' : les motifs doivent donc être des chemins absolus complets
+    (ex : '/storage/.config/dockers/qbittorrent/qBittorrent/BT_backup'),
+    utilisables tels quels, identiques aux chemins de 'files'.
     """
+    exclude_flags = [f"--exclude={e}" for e in (excludes or [])]
+
     glob_paths  = [p for p in paths if "*" in p]
     plain_paths = [p for p in paths if "*" not in p]
 
     results: list[subprocess.CompletedProcess] = []
     if plain_paths:
-        results.append(_rsync_call(["rsync", "-aR", "--delete"], host, user, plain_paths, dest))
+        results.append(_rsync_call(
+            ["rsync", "-aR", "--delete", *exclude_flags], host, user, plain_paths, dest
+        ))
     if glob_paths:
-        results.append(_rsync_call(["rsync", "-aR", "--no-recursive", "--dirs", "--delete"], host, user, glob_paths, dest))
+        results.append(_rsync_call(
+            ["rsync", "-aR", "--no-recursive", "--dirs", "--delete", *exclude_flags],
+            host, user, glob_paths, dest
+        ))
 
     if not results:
         return subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")

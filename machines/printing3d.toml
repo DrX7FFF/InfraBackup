@@ -5,8 +5,9 @@ name = "printing3d"
 host = "ender3"
 user = ""
 
-# Fichiers à copier
-files = [
+# 'include' : racines à sauvegarder (voir commentaire dans mediacenter.toml
+# pour le détail du fonctionnement include/exclude).
+include = [
     # Répertoire de config Klipper
     # (chemin standard Moonraker moderne — à ajuster si nécessaire)
     "/home/adpi3d/printer_data/config",
@@ -16,3 +17,5 @@ files = [
     "/home/adpi3d/klipper/main.cfg",
     "/home/adpi3d/klipper/pi.cfg",
 ]
+
+# exclude non défini → aucune exclusion pour cette machine
