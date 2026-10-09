@@ -5,12 +5,12 @@ Système de sauvegarde déclarative de l'infrastructure personnelle.
 ## Lancement manuel
 
 ```bash
-python backup.py
+python infrabackup.py
 ```
 
 Execution à blanc
 ```bash
-python backup.py --dry-run
+python infrabackup.py --dry-run
 ```
 
 ---
@@ -51,7 +51,7 @@ Le PC Fixe est l'unique orchestrateur. Il se connecte en SSH (ou HTTP) à toutes
 ```
 InfraBackup/                   # Application
 ├── README.md                  # Ce fichier — spec + manuel
-├── backup.py                  # Orchestrateur principal
+├── infrabackup.py             # Orchestrateur principal
 └── tools/
     ├── reports.py             # Catalogue centralisé des rapports disponibles
     ├── ssh.py                 # Fonctions SSH
@@ -75,7 +75,7 @@ backup/                        # Destination : dépôt Git distinct
 
 > Le dossier `backup/` doit être initialisé comme repo Git (`git init`) et avoir un remote configuré.
 
-Dans `backup.py`, `OUTPUT_DIR` définit la destination (actuellement `/home/moi/GIT/backup`)
+Dans `infrabackup.py`, `OUTPUT_DIR` définit la destination (actuellement `/home/moi/GIT/backup`)
 et `CONFIG_DIR = OUTPUT_DIR` place les configurations à sa racine. Adapter `OUTPUT_DIR`
 au chemin du dépôt `backup` sur la machine qui exécute l'application.
 
@@ -83,7 +83,7 @@ au chemin du dépôt `backup` sur la machine qui exécute l'application.
 
 ## Fonctionnement
 
-`backup.py` itère sur les fichiers `*.toml` à la racine de `CONFIG_DIR`, sans parcourir les sous-dossiers, charge chacun, puis exécute automatiquement les modules selon ce qui est défini :
+`infrabackup.py` itère sur les fichiers `*.toml` à la racine de `CONFIG_DIR`, sans parcourir les sous-dossiers, charge chacun, puis exécute automatiquement les modules selon ce qui est défini :
 
 | Clé TOML définie et non vide | Module exécuté |
 |------------------------------|---------------|
@@ -164,7 +164,7 @@ Le rapport est sauvegardé dans `backup/<machine>/reports/git-status.txt`.
 ## Ajout d'une machine
 
 1. Créer `<nom>.toml` à la racine du dépôt `backup` en s'inspirant des exemples
-2. Relancer `python backup.py`
+2. Relancer `python infrabackup.py`
 
 Aucune modification des scripts nécessaire.
 
@@ -177,17 +177,6 @@ cd /home/moi/GIT/backup/
 git init
 git remote add origin <url-de-ton-repo-distant>
 ```
-
----
-
-## Automatisation (cron)
-
-```bash
-# Tous les jours à 3h00
-0 3 * * * python /chemin/vers/infra-backup/backup.py >> /var/log/infra-backup.log 2>&1
-```
-
----
 
 ## Sécurité
 

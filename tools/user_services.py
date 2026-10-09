@@ -30,8 +30,8 @@ def run_user_services(host: str, user: str, output_dir: Path) -> None:
         print("    aucune unité manuelle trouvée")
         return
 
-    for p in paths:
-        print(f"    {p}")
+    # for p in paths:
+    #     print(f"    {p}")
 
     dest = output_dir / "files"
     runner.mkdir(dest)
