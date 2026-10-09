@@ -37,7 +37,7 @@ PC Fixe Ubuntu (orchestrateur)
 
          ↓
 
-    output/ (repo Git)
+    backup/ (repo Git)
          ↓
     push vers repo distant
 ```
@@ -49,37 +49,41 @@ Le PC Fixe est l'unique orchestrateur. Il se connecte en SSH (ou HTTP) à toutes
 ## Structure des fichiers
 
 ```
-infra-backup/
+InfraBackup/                   # Application
 ├── README.md                  # Ce fichier — spec + manuel
 ├── backup.py                  # Orchestrateur principal
-├── tools/
-│   ├── reports.py             # Catalogue centralisé des rapports disponibles
-│   ├── ssh.py                 # Fonctions SSH
-│   ├── files.py               # Copie de fichiers distants (rsync)
-│   ├── git_watch.py           # Surveillance des repos Git
-│   └── runner.py              # Wrapper subprocess / mode dry-run
-├── machines/
-│   ├── pc-fixe.toml           # Config du PC Fixe (exécution locale)
-│   ├── mediacenter.toml       # Config du MediaCenter CoreELEC
-│   └── printing3d.toml        # Config de l'imprimante 3D
-└── output/                    # ← CE DOSSIER EST LE REPO GIT
-    ├── pc-fixe/
-    │   ├── files/             # Fichiers copiés
-    │   └── reports/           # Rapports générés (texte brut)
-    ├── mediacenter/
-    │   ├── files/
-    │   └── reports/
-    └── printing3d/
-        └── files/
+└── tools/
+    ├── reports.py             # Catalogue centralisé des rapports disponibles
+    ├── ssh.py                 # Fonctions SSH
+    ├── files.py               # Copie de fichiers distants (rsync)
+    ├── git_watch.py           # Surveillance des repos Git
+    └── runner.py              # Wrapper subprocess / mode dry-run
+
+backup/                        # Destination : dépôt Git distinct
+├── pc-fixe.toml                # Config du PC Fixe (exécution locale)
+├── mediacenter.toml            # Config du MediaCenter CoreELEC
+├── printing3d.toml             # Config de l'imprimante 3D
+├── pc-fixe/
+│   ├── files/                 # Fichiers copiés
+│   └── reports/               # Rapports générés (texte brut)
+├── mediacenter/
+│   ├── files/
+│   └── reports/
+└── printing3d/
+    └── files/
 ```
 
-> Le dossier `output/` doit être initialisé comme repo Git (`git init`) et avoir un remote configuré.
+> Le dossier `backup/` doit être initialisé comme repo Git (`git init`) et avoir un remote configuré.
+
+Dans `backup.py`, `OUTPUT_DIR` définit la destination (actuellement `/home/moi/GIT/backup`)
+et `CONFIG_DIR = OUTPUT_DIR` place les configurations à sa racine. Adapter `OUTPUT_DIR`
+au chemin du dépôt `backup` sur la machine qui exécute l'application.
 
 ---
 
 ## Fonctionnement
 
-`backup.py` itère sur tous les fichiers `machines/*.toml`, charge chacun, puis exécute automatiquement les modules selon ce qui est défini :
+`backup.py` itère sur les fichiers `*.toml` à la racine de `CONFIG_DIR`, sans parcourir les sous-dossiers, charge chacun, puis exécute automatiquement les modules selon ce qui est défini :
 
 | Clé TOML définie et non vide | Module exécuté |
 |------------------------------|---------------|
@@ -87,7 +91,7 @@ infra-backup/
 | `reports` | `tools/reports.py` — exécute les commandes et sauvegarde la sortie |
 | `git_repos` | `tools/git_watch.py` — vérifie l'état de chaque repo Git |
 
-À la fin de chaque machine, les changements dans `output/<machine>/` sont commités dans Git avec un message horodaté.
+À la fin de chaque machine, les changements dans `backup/<machine>/` sont commités dans Git avec un message horodaté.
 
 ---
 
@@ -95,7 +99,7 @@ infra-backup/
 
 ```toml
 # Identification de la machine
-name = "mediacenter"         # Nom du dossier dans output/
+name = "mediacenter"         # Nom du dossier dans backup/
 host = "192.168.1.50"        # IP ou hostname. "localhost" pour le PC Fixe
 user = "root"                # Utilisateur SSH
 
@@ -153,13 +157,13 @@ Pour chaque repo listé dans `GIT_REPOS`, le script vérifie et rapporte :
 - **Commits locaux non poussés** (`git log @{u}.. --oneline`)
 - **Commits distants non tirés** (`git fetch` + `git log ..@{u} --oneline`)
 
-Le rapport est sauvegardé dans `output/<machine>/reports/git-status.txt`.
+Le rapport est sauvegardé dans `backup/<machine>/reports/git-status.txt`.
 
 ---
 
 ## Ajout d'une machine
 
-1. Créer `machines/<nom>.toml` en s'inspirant des exemples
+1. Créer `<nom>.toml` à la racine du dépôt `backup` en s'inspirant des exemples
 2. Relancer `python backup.py`
 
 Aucune modification des scripts nécessaire.
@@ -169,7 +173,7 @@ Aucune modification des scripts nécessaire.
 ## Initialisation du repo Git de sortie
 
 ```bash
-cd output/
+cd /home/moi/GIT/backup/
 git init
 git remote add origin <url-de-ton-repo-distant>
 ```
@@ -189,5 +193,5 @@ git remote add origin <url-de-ton-repo-distant>
 
 - Les clés SSH vers les machines cibles doivent être configurées sur le PC Fixe (`~/.ssh/config`)
 - **Ne jamais commiter de secrets en clair** : mots de passe, tokens, clés privées
-- Les fichiers `passwords.xml` (Kodi) ou `.env` (Docker) copiés dans `output/` doivent être listés dans `.gitignore` ou chiffrés avant commit
+- Les fichiers `passwords.xml` (Kodi) ou `.env` (Docker) copiés dans `backup/` doivent être listés dans `.gitignore` ou chiffrés avant commit
 - Le repo Git distant doit être **privé**

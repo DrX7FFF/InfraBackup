@@ -2,7 +2,7 @@
 """backup.py — Orchestrateur principal infra-backup.
 
 Usage :
-    python backup.py            # traite toutes les machines dans machines/*.toml
+    python backup.py            # traite tous les fichiers CONFIG_DIR/*.toml
     python backup.py pc-fixe    # traite uniquement la machine spécifiée
 """
 
@@ -23,7 +23,7 @@ from tools.ssh import check_ssh
 SCRIPT_DIR   = Path(__file__).parent
 # OUTPUT_DIR   = SCRIPT_DIR / "output"
 OUTPUT_DIR   = Path('/home/moi/GIT/backup')
-MACHINES_DIR = SCRIPT_DIR / "machines"
+CONFIG_DIR   = OUTPUT_DIR
 
 
 # ---------------------------------------------------------------------------
@@ -165,15 +165,15 @@ def main() -> None:
         print(f"[DRY-RUN] Simulation activée — log : {log_path}")
 
     if args.machine:
-        conf_file = MACHINES_DIR / f"{args.machine}.toml"
+        conf_file = CONFIG_DIR / f"{args.machine}.toml"
         if not conf_file.exists():
             print(f"[ERROR] Fichier de config introuvable : {conf_file}", file=sys.stderr)
             sys.exit(1)
         conf_files = [conf_file]
     else:
-        conf_files = sorted(MACHINES_DIR.glob("*.toml"))
+        conf_files = sorted(CONFIG_DIR.glob("*.toml"))
         if not conf_files:
-            print("[ERROR] Aucun fichier .toml trouvé dans machines/", file=sys.stderr)
+            print(f"[ERROR] Aucun fichier .toml trouvé dans {CONFIG_DIR}", file=sys.stderr)
             sys.exit(1)
 
     for conf_file in conf_files:
