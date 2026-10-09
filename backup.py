@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 import tomllib
 
 from tools import runner
+from tools.catalog import run_tools
 from tools.files import run_files
 from tools.git_watch import run_git_watch
 from tools.reports import run_reports
@@ -84,6 +85,12 @@ def process_machine(conf_file: Path) -> bool:
     if reports:
         print("[reports]")
         run_reports(host, user, machine_output, reports)
+
+    # Module outils
+    tools = cfg.get("tools", [])
+    if tools:
+        print("[tools]")
+        run_tools(host, user, machine_output, tools)
 
     # Module surveillance Git
     git_repos = cfg.get("git_repos", [])

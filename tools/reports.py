@@ -16,7 +16,10 @@ REPORT_CATALOG: dict[str, str] = {
     "flatpak":      "flatpak list --app --columns=name,version",
     "snap":         "snap list",
     # Système
-    "services":     "systemctl list-units --type=service --state=running --no-pager",
+    "services": (   "echo '## Activés au boot (enabled)'; "
+                    "systemctl list-unit-files --type=service --state=enabled --no-pager; "
+                    "echo; echo '## Actifs (running)'; "
+                    "systemctl list-units --type=service --state=running --no-pager"),
     "disques":      "df -h",
     "partitions":   "lsblk",
     "materiel":     "lshw -short",
