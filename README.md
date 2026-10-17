@@ -141,14 +141,17 @@ git_repos = [
 | `services` | `systemctl list-units --type=service --state=running` | Services actifs |
 | `docker` | `docker ps --format ...` | Containers Docker en cours avec version d'image |
 | `disques` | `df -h` | Utilisation des disques |
-| `reseau` | `ip addr && ip route` | Configuration réseau |
+| `ip` | `ip addr && ip route` | Configuration réseau |
+| `network` | `nmcli … connection show` | Connexions NetworkManager : méthode IP (fixe/DHCP), adresse, passerelle, DNS (sans mots de passe) |
 | `materiel` | `lshw -short` | Inventaire matériel |
 | `partitions` | `lsblk` | Partitionnement des disques |
 | `crontab` | `crontab -l` | Tâches cron de l'utilisateur |
+| `users` | `getent passwd` + `id -nG` | Comptes humains (UID ≥ 1000) : nom, UID, GID, dossier, shell, groupes |
 | `gnome` | `dconf dump /` | Configuration GNOME complète |
 | `codium-extensions` | `codium --list-extensions` | Extensions VSCodium |
 | `local-bin` | `ls -1 /usr/local/bin` | Programmes installés à la main pour tout le système |
 | `user-bin` | `ls -1 ~/.local/bin` | Programmes installés à la main pour l'utilisateur |
+| `user-app` | `ls -1 ~/App` | Applications hors paquets (AppImage, archives…) rangées dans `~/App` |
 | `user-launchers` | `ls -1 ~/.local/share/applications \| grep '\.desktop$'` | Lanceurs du menu créés par l'utilisateur ou les applications |
 | `kodi-addons` | `ls /storage/.kodi/addons/` | Liste des addons Kodi installés |
 

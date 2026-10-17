@@ -23,14 +23,20 @@ REPORT_CATALOG: dict[str, str] = {
     "disques":      "df -h",
     "partitions":   "lsblk",
     "materiel":     "lshw -short",
-    "reseau":       "ip addr && ip route",
+    "ip":           "ip addr && ip route",
+    "network":      ("nmcli -t -f NAME connection show | while read -r c; do echo \"## $c\"; "
+                    "nmcli -f connection.type,ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns,ipv6.method "
+                    "connection show \"$c\"; echo; done"),
     "crontab":      "crontab -l",
+    "users":        ("getent passwd | awk -F: '$3>=1000 && $3<65534 {print $1}' | while read -r u; do "
+                    "echo \"$(getent passwd \"$u\" | cut -d: -f1,3,4,6,7) : $(id -nG \"$u\")\"; done"),
     # Applications
     "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'",
     "gnome":        "dconf dump /",
     "codium-extensions": "codium --list-extensions",
     "local-bin":    "ls -1 /usr/local/bin",
     "user-bin":     "ls -1 ~/.local/bin",
+    "user-app":     "ls -1 ~/App",
     "user-launchers": "ls -1 ~/.local/share/applications | grep '\\.desktop$'",
     # CoreELEC / Kodi
     "kodi-addons":  "ls /storage/.kodi/addons/",
