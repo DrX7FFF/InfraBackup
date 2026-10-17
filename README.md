@@ -120,8 +120,11 @@ reports = [
 ]
 
 # Repos Git à surveiller sur cette machine
+# Chemin sans glob → ce repo uniquement
+# Chemin avec glob (*) → tous les repos Git de premier niveau qui matchent
 git_repos = [
     "/storage/repos/mon-repo",
+    "/storage/projets/*",
 ]
 ```
 

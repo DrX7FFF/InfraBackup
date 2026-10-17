@@ -34,13 +34,37 @@ def _parse_git_status(repo: str, raw: str) -> tuple[bool, str]:
     return True, "\n".join(report) + "\n"
 
 
+def _expand_repos(host: str, user: str, repos: list[str]) -> list[str]:
+    """Développe les chemins avec glob (*) en liste des repos Git qu'ils contiennent.
+
+    - Chemin sans glob → conservé tel quel (doit être un repo).
+    - Chemin avec glob → seuls les dossiers matchés contenant un .git sont retenus.
+      Si rien ne matche, le motif est conservé pour apparaître en ERROR dans le rapport.
+    """
+    expanded: list[str] = []
+    for path in repos:
+        if "*" not in path:
+            expanded.append(path)
+            continue
+
+        # Glob évalué par le shell (local ou distant) : ~ et * sont développés sur la machine cible
+        cmd = f'for d in {path}/; do [ -e "$d.git" ] && echo "${{d%/}}"; done; true'
+        result = runner.run_cmd(host, user, cmd, capture_output=True, text=True)
+        found = result.stdout.splitlines()
+        expanded.extend(found or [path])
+    return list(dict.fromkeys(expanded))  # dédoublonne en gardant l'ordre
+
+
 def run_git_watch(host: str, user: str, output_dir: Path, repos: list[str]) -> bool:
     """Vérifie l'état de chaque repo Git et écrit le résultat dans reports/git-status.txt.
 
+    Les chemins avec glob (ex : "~/GIT/*") sont développés en repos Git de premier niveau.
     Retourne True si au moins un repo a des problèmes, False sinon.
     """
     reports_dir = output_dir / "reports"
     runner.mkdir(reports_dir)
+
+    repos = _expand_repos(host, user, repos)
 
     lines: list[str] = []
     any_issue = False

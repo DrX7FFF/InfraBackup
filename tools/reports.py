@@ -13,7 +13,7 @@ REPORT_CATALOG: dict[str, str] = {
     # Paquets
     "apt-manual":   "apt-mark showmanual",
     "apt-versions": "dpkg-query -W --showformat='${Package} ${Version}\\n'",
-    "flatpak":      "flatpak list --app --columns=name,version",
+    "flatpak":      "flatpak list --app --columns=application,name,version",
     "snap":         "snap list",
     # Système
     "services": (   "echo '## Activés au boot (enabled)'; "
@@ -28,6 +28,7 @@ REPORT_CATALOG: dict[str, str] = {
     # Applications
     "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'",
     "gnome":        "dconf dump /",
+    "codium-extensions": "codium --list-extensions",
     # CoreELEC / Kodi
     "kodi-addons":  "ls /storage/.kodi/addons/",
 }
