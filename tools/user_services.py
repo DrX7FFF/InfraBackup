@@ -21,7 +21,7 @@ _FIND_CMD = (
 )
 
 
-def run_user_services(host: str, user: str, output_dir: Path) -> None:
+def run_user_services(host: str, user: str, output_dir: Path, cfg: dict) -> None:
     """Sauvegarde les unités systemd système créées manuellement."""
     result = runner.run_cmd(host, user, _FIND_CMD, capture_output=True, text=True)
     paths = sorted(p for p in result.stdout.splitlines() if p.strip())

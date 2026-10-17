@@ -99,7 +99,7 @@ def process_machine(conf_file: Path) -> bool:
     tools = cfg.get("tools", [])
     if tools:
         print("[tools]")
-        run_tools(host, user, machine_output, tools)
+        run_tools(host, user, machine_output, cfg, tools)
 
     # Module surveillance Git
     git_repos = cfg.get("git_repos", [])
