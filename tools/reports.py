@@ -29,6 +29,9 @@ REPORT_CATALOG: dict[str, str] = {
     "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'",
     "gnome":        "dconf dump /",
     "codium-extensions": "codium --list-extensions",
+    "local-bin":    "ls -1 /usr/local/bin",
+    "user-bin":     "ls -1 ~/.local/bin",
+    "user-launchers": "ls -1 ~/.local/share/applications | grep '\\.desktop$'",
     # CoreELEC / Kodi
     "kodi-addons":  "ls /storage/.kodi/addons/",
 }

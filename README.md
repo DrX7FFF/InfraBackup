@@ -146,6 +146,10 @@ git_repos = [
 | `partitions` | `lsblk` | Partitionnement des disques |
 | `crontab` | `crontab -l` | Tâches cron de l'utilisateur |
 | `gnome` | `dconf dump /` | Configuration GNOME complète |
+| `codium-extensions` | `codium --list-extensions` | Extensions VSCodium |
+| `local-bin` | `ls -1 /usr/local/bin` | Programmes installés à la main pour tout le système |
+| `user-bin` | `ls -1 ~/.local/bin` | Programmes installés à la main pour l'utilisateur |
+| `user-launchers` | `ls -1 ~/.local/share/applications \| grep '\.desktop$'` | Lanceurs du menu créés par l'utilisateur ou les applications |
 | `kodi-addons` | `ls /storage/.kodi/addons/` | Liste des addons Kodi installés |
 
 Pour ajouter un rapport : ajouter une entrée dans `REPORT_CATALOG` dans `tools/reports.py`.
