@@ -19,6 +19,7 @@ from tools.catalog import run_tools
 from tools.files import run_files
 from tools.git_watch import run_git_watch
 from tools.reports import run_reports
+from tools.secrets import run_secrets
 from tools.ssh import check_ssh
 
 SCRIPT_DIR   = Path(__file__).parent
@@ -79,6 +80,14 @@ def process_machine(conf_file: Path) -> bool:
             exclude = [str(Path(p).expanduser()) for p in exclude]
         print("[files]")
         run_files(host, user, machine_output, include, exclude=exclude)
+
+    # Module secrets (chiffrés avec age)
+    secrets = cfg.get("secrets", [])
+    if secrets:
+        if host == "localhost":
+            secrets = [str(Path(p).expanduser()) for p in secrets]
+        print("[secrets]")
+        run_secrets(host, user, machine_output, secrets, cfg["secret_public_key"])
 
     # Module rapports
     reports = cfg.get("reports", [])
