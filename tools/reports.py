@@ -32,7 +32,7 @@ REPORT_CATALOG: dict[str, str] = {
                     "echo \"$(getent passwd \"$u\" | cut -d: -f1,3,4,6,7) : $(id -nG \"$u\")\"; done"),
     # Applications
     "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'",
-    "gnome":        "dconf dump /",
+    "dumpgnome":    "dconf dump /",
     "gnome-extensions": "gnome-extensions list --details",
     "codium-extensions": "codium --list-extensions",
     "brave-flags":  "jq -r '.browser.enabled_labs_experiments[]?' ~/.config/BraveSoftware/Brave-Browser/'Local State'",
