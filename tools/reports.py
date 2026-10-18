@@ -34,6 +34,7 @@ REPORT_CATALOG: dict[str, str] = {
     "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'",
     "gnome":        "dconf dump /",
     "codium-extensions": "codium --list-extensions",
+    "brave-flags":  "jq -r '.browser.enabled_labs_experiments[]?' ~/.config/BraveSoftware/Brave-Browser/'Local State'",
     "local-bin":    "ls -1 /usr/local/bin",
     "user-bin":     "ls -1 ~/.local/bin",
     "user-app":     "ls -1 ~/App",

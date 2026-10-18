@@ -149,6 +149,7 @@ git_repos = [
 | `users` | `getent passwd` + `id -nG` | Comptes humains (UID ≥ 1000) : nom, UID, GID, dossier, shell, groupes |
 | `gnome` | `dconf dump /` | Configuration GNOME complète |
 | `codium-extensions` | `codium --list-extensions` | Extensions VSCodium |
+| `brave-flags` | `jq` sur `Local State` | Réglages `brave://flags` modifiés (non synchronisés par Brave) |
 | `local-bin` | `ls -1 /usr/local/bin` | Programmes installés à la main pour tout le système |
 | `user-bin` | `ls -1 ~/.local/bin` | Programmes installés à la main pour l'utilisateur |
 | `user-app` | `ls -1 ~/App` | Applications hors paquets (AppImage, archives…) rangées dans `~/App` |
