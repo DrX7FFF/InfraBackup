@@ -148,6 +148,7 @@ git_repos = [
 | `crontab` | `crontab -l` | Tâches cron de l'utilisateur |
 | `users` | `getent passwd` + `id -nG` | Comptes humains (UID ≥ 1000) : nom, UID, GID, dossier, shell, groupes |
 | `gnome` | `dconf dump /` | Configuration GNOME complète |
+| `gnome-extensions` | `gnome-extensions list --details` | Extensions GNOME (utilisateur et système, voir `Chemin`) : URL, version, état |
 | `codium-extensions` | `codium --list-extensions` | Extensions VSCodium |
 | `brave-flags` | `jq` sur `Local State` | Réglages `brave://flags` modifiés (non synchronisés par Brave) |
 | `local-bin` | `ls -1 /usr/local/bin` | Programmes installés à la main pour tout le système |
