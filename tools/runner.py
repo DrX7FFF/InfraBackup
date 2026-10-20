@@ -113,11 +113,11 @@ def run_rsync(
     results: list[subprocess.CompletedProcess] = []
     if plain_paths:
         results.append(_rsync_call(
-            ["rsync", "-aR", "--delete", *exclude_flags], host, user, plain_paths, dest
+            ["rsync", "-aR", "--delete", "--trust-sender", *exclude_flags], host, user, plain_paths, dest
         ))
     if glob_paths:
         results.append(_rsync_call(
-            ["rsync", "-aR", "--no-recursive", "--dirs", "--delete", *exclude_flags],
+            ["rsync", "-aR", "--no-recursive", "--dirs", "--delete", "--trust-sender", *exclude_flags],
             host, user, glob_paths, dest
         ))
 

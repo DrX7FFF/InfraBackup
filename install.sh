@@ -18,7 +18,7 @@ cat > ~/.local/share/applications/infrabackup.desktop << EOF
 [Desktop Entry]
 Name=InfraBackup
 Comment=Lance la sauvegarde des configurations
-Exec=bash -c '~/.local/bin/infrabackup; read -r -p "Terminé, Entrée pour fermer"'
+Exec=bash -c '~/.local/bin/infrabackup'
 Icon=drive-harddisk
 Terminal=true
 Type=Application

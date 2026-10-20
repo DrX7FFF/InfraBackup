@@ -31,7 +31,7 @@ REPORT_CATALOG: dict[str, str] = {
     "users":        ("getent passwd | awk -F: '$3>=1000 && $3<65534 {print $1}' | while read -r u; do "
                     "echo \"$(getent passwd \"$u\" | cut -d: -f1,3,4,6,7) : $(id -nG \"$u\")\"; done"),
     # Applications
-    "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'",
+    "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}'",
     "dumpgnome":    "dconf dump /",
     "gnome-extensions": "gnome-extensions list --details",
     "codium-extensions": "codium --list-extensions",
@@ -42,6 +42,7 @@ REPORT_CATALOG: dict[str, str] = {
     "user-launchers": "ls -1 ~/.local/share/applications | grep '\\.desktop$'",
     # CoreELEC / Kodi
     "kodi-addons":  "ls /storage/.kodi/addons/",
+    "jackett-indexers": "cd /storage/.config/dockers/jackett/Jackett/Indexers && ls -1 *.json",
 }
 
 
