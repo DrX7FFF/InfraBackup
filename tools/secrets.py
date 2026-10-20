@@ -38,7 +38,9 @@ def run_secrets(host: str, user: str, output_dir: Path, paths: list[str], public
         print("    inchangé")
         return
 
-    result = runner.run_cmd(host, user, f"tar -C / -cf - {rel}", capture_output=True)
+    # Archive uniquement les fichiers trouvés : un absent n'est signalé qu'une fois (par find)
+    found = " ".join(shlex.quote(l.split(None, 1)[1]) for l in manifest.splitlines())
+    result = runner.run_cmd(host, user, f"tar -C / -cf - {found}", capture_output=True)
     if result.returncode != 0:
         print(f"[WARN] tar a rencontré des erreurs :\n{result.stderr.decode()}", file=sys.stderr)
     if not result.stdout:

@@ -14,7 +14,7 @@ def _parse_git_status(
     """
     status_lines = raw.splitlines()
     if not status_lines:
-        return False, f"ERROR {repo} (pas de sortie)\n"
+        return True, f"ERROR {repo} (pas de sortie)\n"
 
     branch_line = status_lines[0]  # ex: ## main...origin/main [ahead 1, behind 2]
     file_lines = status_lines[1:]  # fichiers modifiés/non suivis
@@ -82,7 +82,7 @@ def _expand_repos(host: str, user: str, repos: list[str]) -> list[str]:
     """Développe les chemins avec glob (*) en liste des repos Git qu'ils contiennent.
 
     - Chemin sans glob → conservé tel quel (doit être un repo).
-    - Chemin avec glob → seuls les dossiers matchés contenant un .git sont retenus.
+    - Chemin avec glob → tous les dossiers matchés (ceux sans .git sont signalés ensuite).
       Si rien ne matche, le motif est conservé pour apparaître en ERROR dans le rapport.
     """
     expanded: list[str] = []
@@ -92,7 +92,7 @@ def _expand_repos(host: str, user: str, repos: list[str]) -> list[str]:
             continue
 
         # Glob évalué par le shell (local ou distant) : ~ et * sont développés sur la machine cible
-        cmd = f'for d in {path}/; do [ -e "$d.git" ] && echo "${{d%/}}"; done; true'
+        cmd = f'for d in {path}/; do [ -d "$d" ] && echo "${{d%/}}"; done; true'
         result = runner.run_cmd(host, user, cmd, capture_output=True, text=True)
         found = result.stdout.splitlines()
         expanded.extend(found or [path])
@@ -115,6 +115,12 @@ def run_git_watch(host: str, user: str, output_dir: Path, repos: list[str]) -> b
 
     for repo in repos:
         print(f"  [git] {repo}")
+
+        check = runner.run_cmd(host, user, f"[ -e {repo}/.git ]", capture_output=True, text=True)
+        if check.returncode != 0:
+            lines.append(f"ISSUES {repo}\n  [not a git repo]\n")
+            any_issue = True
+            continue
 
         cmd = f"git -C {repo} fetch --quiet 2>/dev/null || echo fetch-failed >&2; LC_ALL=C git -C {repo} status --short --branch"  # LC_ALL=C : ahead/behind en anglais pour le parsing
 
