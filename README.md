@@ -75,7 +75,7 @@ backup/                        # Destination : dépôt Git distinct
 
 > Le dossier `backup/` doit être initialisé comme repo Git (`git init`) et avoir un remote configuré.
 
-Dans `infrabackup.py`, `OUTPUT_DIR` définit la destination (actuellement `/home/moi/GIT/backup`)
+Dans `infrabackup.py`, `OUTPUT_DIR` définit la destination (actuellement `/home/moi/backup`)
 et `CONFIG_DIR = OUTPUT_DIR` place les configurations à sa racine. Adapter `OUTPUT_DIR`
 au chemin du dépôt `backup` sur la machine qui exécute l'application.
 
@@ -185,7 +185,7 @@ Aucune modification des scripts nécessaire.
 ## Initialisation du repo Git de sortie
 
 ```bash
-cd /home/moi/GIT/backup/
+cd /home/moi/backup/
 git init
 git remote add origin <url-de-ton-repo-distant>
 ```

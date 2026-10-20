@@ -26,7 +26,7 @@ from tools.ssh import check_ssh
 
 SCRIPT_DIR   = Path(__file__).parent
 # OUTPUT_DIR   = SCRIPT_DIR / "output"
-OUTPUT_DIR   = Path('/home/moi/GIT/backup')
+OUTPUT_DIR   = Path('/home/moi/backup')
 CONFIG_DIR   = OUTPUT_DIR
 
 

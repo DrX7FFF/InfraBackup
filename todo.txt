@@ -1,6 +1,0 @@
-rechercher les services créé manuellement
-
-backup des dossier ~/.xxx
-comme :
-/home/moi/.gdfuse/default/config   # Configuration de ocamlfuse
-
