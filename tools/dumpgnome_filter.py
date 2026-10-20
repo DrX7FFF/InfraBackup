@@ -6,6 +6,7 @@ Les nouvelles sections apparaissent donc tant qu'elles ne sont pas exclues.
 Destination : output_dir/reports/dumpgnome-filtered.txt
 """
 
+import sys
 from pathlib import Path
 
 from tools import runner
@@ -18,6 +19,8 @@ def run_dumpgnome_filter(host: str, user: str, output_dir: Path, cfg: dict) -> N
     excludes = [l.strip() for l in exclude_file.read_text().splitlines() if l.strip()] if exclude_file.exists() else []
 
     result = runner.run_cmd(host, user, "dconf dump /", capture_output=True, text=True)
+    if result.stderr:
+        print(f"[WARN] dconf dump a rencontré des erreurs :\n{result.stderr}", file=sys.stderr)
 
     # Le dump est une suite de blocs « [chemin] + clés » séparés par une ligne vide
     kept = []

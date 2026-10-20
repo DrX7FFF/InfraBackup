@@ -24,6 +24,8 @@ _FIND_CMD = (
 def run_user_services(host: str, user: str, output_dir: Path, cfg: dict) -> None:
     """Sauvegarde les unités systemd système créées manuellement."""
     result = runner.run_cmd(host, user, _FIND_CMD, capture_output=True, text=True)
+    if result.stderr:
+        print(f"[WARN] find a rencontré des erreurs :\n{result.stderr}", file=sys.stderr)
     paths = sorted(p for p in result.stdout.splitlines() if p.strip())
 
     if not paths:

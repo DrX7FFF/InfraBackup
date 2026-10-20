@@ -36,6 +36,8 @@ def run_user_apt(host: str, user: str, output_dir: Path, cfg: dict) -> None:
         known |= {line.split()[0] for line in user_manifest.read_text().splitlines() if line.strip()}
 
     result = runner.run_cmd(host, user, "apt-mark showmanual", capture_output=True, text=True)
+    if result.stderr:
+        print(f"[WARN] apt-mark a rencontré des erreurs :\n{result.stderr}", file=sys.stderr)
     pkgs = [p for p in result.stdout.splitlines() if p not in known]
 
     runner.write_text(reports_dir / "apt-manual-filtered.txt", "".join(f"{p}\n" for p in pkgs))

@@ -6,6 +6,8 @@ Usage :
     python backup.py pc-fixe    # traite uniquement la machine spécifiée
 """
 
+import contextlib
+import io
 import subprocess
 import sys
 from datetime import datetime
@@ -65,6 +67,34 @@ def process_machine(conf_file: Path) -> bool:
     print(f" Machine : {name} ({host})")
     print("═══════════════════════════════════════")
 
+    # alertes.txt : [WARN]/[ERROR] de la machine, vide si tout va bien (visible dans la diff)
+    tee = _Tee(sys.stderr)
+    with contextlib.redirect_stderr(tee):
+        try:
+            ok = run_modules(cfg, name, host, user, machine_output)
+        except Exception as e:
+            # Un plantage ne bloque pas les machines suivantes et reste visible dans alertes.txt
+            print(f"[ERROR] {type(e).__name__} : {e}", file=sys.stderr)
+            ok = False
+    if not runner.DRY_RUN:
+        (machine_output / "alertes.txt").write_text(tee.getvalue())
+    return ok
+
+
+class _Tee(io.StringIO):
+    """Affiche sur stderr et mémorise ce qui y est écrit."""
+
+    def __init__(self, stream):
+        super().__init__()
+        self.stream = stream
+
+    def write(self, s):
+        self.stream.write(s)
+        return super().write(s)
+
+
+def run_modules(cfg: dict, name: str, host: str, user: str, machine_output: Path) -> bool:
+    """Exécute tous les modules pour une machine."""
     # Vérifie la connectivité
     if not check_ssh(host, user):
         print(f"[ERROR] Impossible de joindre {host} — machine ignorée", file=sys.stderr)
