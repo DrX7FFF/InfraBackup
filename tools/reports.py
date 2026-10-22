@@ -28,6 +28,7 @@ REPORT_CATALOG: dict[str, str] = {
                     "nmcli -f connection.type,ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns,ipv6.method "
                     "connection show \"$c\"; echo; done"),
     "crontab":      "crontab -l",
+    "firmware":     "LC_ALL=C fwupdmgr get-updates --no-unreported-check --no-metadata-check 2>&1 | grep -v '…: *[0-9]*%'",
     "users":        ("getent passwd | awk -F: '$3>=1000 && $3<65534 {print $1}' | while read -r u; do "
                     "echo \"$(getent passwd \"$u\" | cut -d: -f1,3,4,6,7) : $(id -nG \"$u\")\"; done"),
     # Applications
