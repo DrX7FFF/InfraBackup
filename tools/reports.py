@@ -47,7 +47,7 @@ REPORT_CATALOG: dict[str, str] = {
     "brave-flags":  "jq -r '.browser.enabled_labs_experiments[]?' ~/.config/BraveSoftware/Brave-Browser/'Local State'",
     "local-bin":    "ls -1 /usr/local/bin",
     "user-bin":     "ls -1 ~/.local/bin",
-    "user-app":     "ls -1 ~/App",
+    "user-app":     "ls -1 ~/Applications",
     "user-launchers": "ls -1 ~/.local/share/applications | grep '\\.desktop$'",
     # CoreELEC / Kodi
     "kodi-addons":  "ls /storage/.kodi/addons/",

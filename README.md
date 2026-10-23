@@ -153,7 +153,7 @@ git_repos = [
 | `brave-flags` | `jq` sur `Local State` | Réglages `brave://flags` modifiés (non synchronisés par Brave) |
 | `local-bin` | `ls -1 /usr/local/bin` | Programmes installés à la main pour tout le système |
 | `user-bin` | `ls -1 ~/.local/bin` | Programmes installés à la main pour l'utilisateur |
-| `user-app` | `ls -1 ~/App` | Applications hors paquets (AppImage, archives…) rangées dans `~/App` |
+| `user-app` | `ls -1 ~/Applications` | Applications hors paquets (AppImage, archives…) rangées dans `~/Applications` |
 | `user-launchers` | `ls -1 ~/.local/share/applications \| grep '\.desktop$'` | Lanceurs du menu créés par l'utilisateur ou les applications |
 | `kodi-addons` | `ls /storage/.kodi/addons/` | Liste des addons Kodi installés |
 
