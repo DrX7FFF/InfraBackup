@@ -42,7 +42,7 @@ REPORT_CATALOG: dict[str, str] = {
     # Applications
     "docker":       "docker ps --format 'table {{.Names}}\t{{.Image}}'",
     "dumpgnome":    "dconf dump /",
-    "gnome-extensions": "gnome-extensions list --details",
+    "gnome-extensions": "gnome-extensions list | LC_ALL=C sort | while read -r u; do gnome-extensions info \"$u\"; echo; done",
     "codium-extensions": "codium --list-extensions",
     "brave-flags":  "jq -r '.browser.enabled_labs_experiments[]?' ~/.config/BraveSoftware/Brave-Browser/'Local State'",
     "local-bin":    "ls -1 /usr/local/bin",
