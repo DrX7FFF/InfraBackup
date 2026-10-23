@@ -15,6 +15,14 @@ REPORT_CATALOG: dict[str, str] = {
     "apt-versions": "dpkg-query -W --showformat='${Package} ${Version}\\n'",
     "flatpak":      "flatpak list --app --columns=application,name,version",
     "snap":         "snap list",
+    # Dépôts tiers et paquets installés qui en viennent (section vide = dépôt orphelin)
+    "apt-sources": ("dpkg-query -W -f='${Package}\\n' | awk '"
+                    "FNR==NR {inst[$0]=1; next} "
+                    "FNR==1 {skip = FILENAME ~ /ubuntu\\.com/; f=FILENAME; sub(/.*\\//,\"\",f); sub(/_dists.*/,\"\",f); "
+                    "if (!skip && !(f in seen)) {seen[f]=1; print \"## \" f}} "
+                    "skip {next} "
+                    "/^Package: / && ($2 in inst) && !done[f,$2]++ {print $2}"
+                    "' - /var/lib/apt/lists/*_Packages"),
     # Système
     "services": (   "echo '## Activés au boot (enabled)'; "
                     "systemctl list-unit-files --type=service --state=enabled --no-pager; "
